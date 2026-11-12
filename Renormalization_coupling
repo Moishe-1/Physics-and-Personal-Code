@@ -31,11 +31,6 @@ def buildinittensor(beta, J):
 
 #Course Grain Operation
 def coursegrain(Tensor1, eigvalsnum):
-    #print(type(Tensor1))
-    print(Tensor1.shape[0],Tensor1.shape[1],Tensor1.shape[2],Tensor1.shape[3])
-    if Tensor1.shape[0]*Tensor1.shape[1] != Tensor1.shape[2]*Tensor1.shape[3]:
-        print("Something wrong with tensor shape")
-    DN = min(Tensor1.shape[0]*Tensor1.shape[1],eigvalsnum)
     
     #Tensor A breakup
     ua, sa, va = cuquantum.tensornet.tensor.decompose('ruld->ulm,drm', Tensor1, method=cuquantum.tensornet.tensor.SVDMethod(max_extent=DN))#,partition="UV"
@@ -53,14 +48,13 @@ def coursegrain(Tensor1, eigvalsnum):
     ubs = np.einsum('ldm,m->ldm',ub,sqrtb)
     vbs = np.einsum('rum,m->rum',vb,sqrtb)
 
-    The_Whole_Panini = cuquantum.tensornet.einsum('abi,caj,dck,bdl->ijkl', uas, ubs, vas, vbs)
-    return The_Whole_Panini, DN, SAVal, SBVal
+    Coursegrainedtensor = cuquantum.tensornet.einsum('abi,caj,dck,bdl->ijkl', uas, ubs, vas, vbs)
+    return Coursegrainedtensor, DN, SAVal, SBVal
 
 
 def iteratemain(Coupling,Temp, nn, eigvalskeep):
         J = Coupling
         Tc = (2*Temp)/((np.log(1+ np.sqrt(2))))
-        #Tc = (2*J)/((np.log(1+ np.sqrt(2))))
         Tthing = Tc
         beta = 1 / (Tthing)
         normalizationvals = []
@@ -68,16 +62,13 @@ def iteratemain(Coupling,Temp, nn, eigvalskeep):
         Eigvalueskeep = eigvalskeep
         DNlist = []
         Tensor1thing = buildinittensor(beta,J)
-        print("max:",np.max(Tensor1thing))
         Tensor1renormalized = Tensor1thing/np.max(Tensor1thing)
         normalizationvals.append(np.max(Tensor1thing))
         Tensorcoursegrained, DN1, SAVal, SBVal = coursegrain(Tensor1renormalized, Eigvalueskeep)
         Tensorcoursegrained = Tensorcoursegrained/(SAVal*SBVal)
         normalizationvals.append(SAVal*SBVal)
         DNlist.append(DN1)
-        #print(Tensorcoursegrained)
         Tensors = Tensors1/2
-        #print("DN1:", DN1)
         DN1 = Eigvalueskeep
         while Tensors >= 2:
                 Tensorcoursegrained, DN2, SAVal, SBVal = coursegrain(Tensorcoursegrained, DN1)
@@ -90,9 +81,6 @@ def iteratemain(Coupling,Temp, nn, eigvalskeep):
                     Tensors = Tensors/2
                 else:
                       print("not good")
-
-        if Tensors != 1:
-                print("Something went wrong (# of Tensors)")
 
         Partfunction = np.einsum('ijij->', Tensorcoursegrained)
 
