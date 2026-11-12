@@ -31,12 +31,6 @@ def buildinittensor(beta, J, h):
 
 #Course Grain Operation
 def coursegrain(Tensor1, eigvalsnum):
-    #print(type(Tensor1))
-    print(Tensor1.shape[0],Tensor1.shape[1],Tensor1.shape[2],Tensor1.shape[3])
-    if Tensor1.shape[0]*Tensor1.shape[1] != Tensor1.shape[2]*Tensor1.shape[3]:
-        print("Something wrong with tensor shape")
-    DN = min(Tensor1.shape[0]*Tensor1.shape[1],eigvalsnum)
-    
     #Tensor A breakup
     ua, sa, va = cuquantum.tensornet.tensor.decompose('ruld->ulm,drm', Tensor1, method=cuquantum.tensornet.tensor.SVDMethod(max_extent=DN))#,partition="UV"
     print("UA shape:",ua.shape[2])
@@ -53,8 +47,8 @@ def coursegrain(Tensor1, eigvalsnum):
     ubs = np.einsum('ldm,m->ldm',ub,sqrtb)
     vbs = np.einsum('rum,m->rum',vb,sqrtb)
 
-    The_Whole_Panini = cuquantum.tensornet.einsum('abi,caj,dck,bdl->ijkl', uas, ubs, vas, vbs) #AI pointed out a bug here, derivation of the math for this contraction is mine though
-    return The_Whole_Panini, DN, SAVal, SBVal
+    Coursegrainedtensor = cuquantum.tensornet.einsum('abi,caj,dck,bdl->ijkl', uas, ubs, vas, vbs) #AI pointed out a bug here, derivation of the math for this contraction is mine though
+    return Coursegrainedtensor, DN, SAVal, SBVal
 
 
 def iteratemain(Coupling,Temp, nn, eigvalskeep, extfieldvariable):
@@ -69,22 +63,18 @@ def iteratemain(Coupling,Temp, nn, eigvalskeep, extfieldvariable):
         Eigvalueskeep = eigvalskeep
         DNlist = []
         Tensor1thing = buildinittensor(beta,J, extfieldvariable)
-        print("max:",np.max(Tensor1thing))
         Tensor1renormalized = Tensor1thing/np.max(Tensor1thing)
         normalizationvals.append(np.max(Tensor1thing))
         Tensorcoursegrained, DN1, SAVal, SBVal = coursegrain(Tensor1renormalized, Eigvalueskeep)
         normalizationvals.append(SAVal*SBVal)
         Tensorcoursegrained = Tensorcoursegrained/(SAVal*SBVal)
         DNlist.append(DN1)
-        #print(Tensorcoursegrained)
         Tensors = Tensors1/2
         Tensorcoursegrained, DN1, SAVal, SBVal = coursegrain(Tensorcoursegrained, Eigvalueskeep)
         normalizationvals.append(SAVal*SBVal)
         Tensorcoursegrained = Tensorcoursegrained/(SAVal*SBVal)
         DNlist.append(DN1)
-        #print(Tensorcoursegrained)
         Tensors = Tensors/2
-        #print("DN1:", DN1)
         DN1 = Eigvalueskeep
         while Tensors >= 2:
                 Tensorcoursegrained, DN2, SAVal, SBVal = coursegrain(Tensorcoursegrained, DN1)
@@ -99,9 +89,6 @@ def iteratemain(Coupling,Temp, nn, eigvalskeep, extfieldvariable):
                     Tensors = Tensors/2
                 else:
                       print("not good")
-
-        if Tensors != 1:
-                print("Something went wrong (# of Tensors)")
 
         print("final tensor:",Tensorcoursegrained)
         print("eigenvalues kept:", DNlist)
