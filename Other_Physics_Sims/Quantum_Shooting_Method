@@ -1,0 +1,25 @@
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+#This is to solve a specific form of the schrodinger equation found in Townsend's Quantum Mechanics Textbook
+def schrodin(y, z,epsilon):
+    p, vp = y
+    dpdz = vp
+    dp2dz2 = -2*(epsilon-abs(z))*p
+    return dpdz, dp2dz2
+
+# Initial condition
+ic = [1,0]
+
+z = np.linspace(0, 3.5, 100)
+#I narrowed down until I got between 0.8 and 0.9 and then tested the refined epsilon range between 0.8 and 0.81
+epsilon  = np.linspace(0.8,0.81,10)
+# Solve ODE
+for k in epsilon:
+    solution = odeint(schrodin, ic, z, args = (k,))
+    plt.plot(z, solution[:, 0])  
+    plt.title('Wave function numerical for epsilon:' +str(k))
+    plt.xlabel('Z')
+    plt.ylabel('Psi')
+    plt.grid()
+    plt.show()
