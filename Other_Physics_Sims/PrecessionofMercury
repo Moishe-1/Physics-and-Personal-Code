@@ -1,0 +1,171 @@
+#This simulation is designed to measure the precession of the perihelion of mercury, though acts as a general classical many-bodied planet simulation
+def planet(var, t, G,alpha1, sunmass, mercurymass, venusmass, earthmass, marsmass, jupitermass, saturnmass):
+    xm, vxm, ym, vym, xv, vxv, yv, vyv, xe, vxe, ye, vye, xmars, vxmars, ymars, vymars, xj, vxj, yj, vyj, xs, vxs, ys, vys = var
+    
+# Mercury's position and velocity
+    dvxdtm = (-(G*sunmass*xm)*(((xm**2)+(ym**2))**(-3/2)) * (1 + (alpha1 / ((xm**2) + (ym**2))))) - ((G*venusmass*(xv-xm))*((((xv-xm)**2)+((yv-ym)**2))**(-3/2)) * (1 + (alpha1 / (((xv-xm)**2) + ((yv-ym)**2))))) - ((G*earthmass*(xe-xm))*((((xe-xm)**2)+((ye-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xe-xm)**2) + ((ye-ym)**2))))) - ((G*marsmass*(xmars-xm))*((((xmars-xm)**2)+((ymars-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xmars-xm)**2) + ((ymars-ym)**2))))) - ((G*jupitermass*(xj-xm))*((((xj-xm)**2)+((yj-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xj-xm)**2) + ((yj-ym)**2))))) - ((G*saturnmass*(xs-xm))*((((xs-xm)**2)+((ys-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xs-xm)**2) + ((ys-ym)**2))))) 
+    dvydtm = (-(G*sunmass*ym)*(((xm**2)+(ym**2))**(-3/2)) * (1 + (alpha1/ ((xm**2) + (ym**2))))) - ((G*venusmass*(yv-ym))*((((xv-xm)**2)+((yv-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xv-xm)**2) + ((yv-ym)**2))))) - ((G*earthmass*(ye-ym))*((((xe-xm)**2)+((ye-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xe-xm)**2) + ((ye-ym)**2))))) - ((G*marsmass*(ymars-ym))*((((xmars-xm)**2)+((ymars-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xmars-xm)**2) + ((ymars-ym)**2))))) - ((G*jupitermass*(yj-ym))*((((xj-xm)**2)+((yj-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xj-xm)**2) + ((yj-ym)**2))))) - ((G*saturnmass*(ys-ym))*((((xs-xm)**2)+((ys-ym)**2))**(-3/2)) * (1 + (alpha1/ (((xs-xm)**2) + ((ys-ym)**2)))))
+    dxdtm = vxm
+    dydtm = vym
+    # Venus' position and velocity
+    dxvdt = vxv
+    dvxvdt = -(G*sunmass*xv)*(((xv**2)+(yv**2))**(-3/2)) * (1 + (alpha1/((xv**2) + (yv**2)))) - (G*mercurymass*(xm-xv)) * ((((xm-xv)**2) + ((ym-yv)**2))**(-3/2)) * (1 + (alpha1/(((xm-xv)**2) + ((ym-yv)**2)))) - (G*earthmass*(xe-xv)) * ((((xe-xv)**2) + ((ye-yv)**2))**(-3/2)) * (1 + (alpha1/(((xe-xv)**2) + ((ye-yv)**2)))) - (G*marsmass*(xmars-xv)) * ((((xmars-xv)**2) + ((ymars-yv)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xv)**2) + ((ymars-yv)**2)))) - (G*jupitermass*(xj-xv)) * ((((xj-xv)**2) + ((yj-yv)**2))**(-3/2)) * (1 + (alpha1/(((xj-xv)**2) + ((yj-yv)**2)))) - (G*saturnmass*(xs-xv)) * ((((xs-xv)**2) + ((ys-yv)**2))**(-3/2)) * (1 + (alpha1/(((xs-xv)**2) + ((ys-yv)**2))))
+    dyvdt = vyv
+    dvyvdt = -(G*sunmass*yv)*(((xv**2)+(yv**2))**(-3/2)) * (1 + (alpha1/((xv**2) + (yv**2)))) - (G*mercurymass*(yv-ym)) * ((((xv-xm)**2) + ((yv-ym)**2))**(-3/2)) * (1 + (alpha1/(((xv-xm)**2) + ((yv-ym)**2)))) - (G*earthmass*(ye-yv)) * ((((xe-xv)**2) + ((ye-yv)**2))**(-3/2)) * (1 + (alpha1/(((xe-xv)**2) + ((ye-yv)**2)))) - (G*marsmass*(ymars-yv)) * ((((xmars-xv)**2) + ((ymars-yv)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xv)**2) + ((ymars-yv)**2)))) - (G*jupitermass*(yj-yv)) * ((((xj-xv)**2) + ((yj-yv)**2))**(-3/2)) * (1 + (alpha1/(((xj-xv)**2) + ((yj-yv)**2)))) - (G*saturnmass*(ys-yv)) * ((((xs-xv)**2) + ((ys-yv)**2))**(-3/2)) * (1 + (alpha1/(((xs-xv)**2) + ((ys-yv)**2))))
+
+    # Earth' position and velocity
+    dxedt = vxe
+    dvxedt = -(G*sunmass*xe)*(((xe**2)+(ye**2))**(-3/2)) * (1 + (alpha1/((xe**2) + (ye**2)))) - (G*mercurymass*(xm-xe)) * ((((xm-xe)**2) + ((ym-ye)**2))**(-3/2)) * (1 + (alpha1/(((xm-xe)**2) + ((ym-ye)**2)))) - (G*venusmass*(xv-xe)) * ((((xv-xe)**2) + ((yv-ye)**2))**(-3/2)) * (1 + (alpha1/(((xv-xe)**2) + ((yv-ye)**2)))) - (G*marsmass*(xmars-xe)) * ((((xmars-xe)**2) + ((ymars-ye)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xe)**2) + ((ymars-ye)**2)))) - (G*jupitermass*(xj-xe)) * ((((xj-xe)**2) + ((yj-ye)**2))**(-3/2)) * (1 + (alpha1/(((xj-xe)**2) + ((yj-ye)**2)))) - (G*saturnmass*(xs-xe)) * ((((xs-xe)**2) + ((ys-ye)**2))**(-3/2)) * (1 + (alpha1/(((xs-xe)**2) + ((ys-ye)**2))))
+    dyedt = vye
+    dvyedt = -(G*sunmass*ye)*(((xe**2)+(ye**2))**(-3/2)) * (1 + (alpha1/((xe**2) + (ye**2)))) - (G*mercurymass*(ye-ym)) * ((((xe-xm)**2) + ((ye-ym)**2))**(-3/2)) * (1 + (alpha1/(((xe-xm)**2) + ((ye-ym)**2)))) - (G*venusmass*(ye-yv)) * ((((xe-xv)**2) + ((ye-yv)**2))**(-3/2)) * (1 + (alpha1/(((xe-xv)**2) + ((ye-yv)**2)))) - (G*marsmass*(ymars-ye)) * ((((xmars-xe)**2) + ((ymars-ye)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xe)**2) + ((ymars-ye)**2)))) - (G*jupitermass*(yj-ye)) * ((((xj-xe)**2) + ((yj-ye)**2))**(-3/2)) * (1 + (alpha1/(((xj-xe)**2) + ((yj-ye)**2)))) - (G*saturnmass*(ys-ye)) * ((((xs-xe)**2) + ((ys-ye)**2))**(-3/2)) * (1 + (alpha1/(((xs-xe)**2) + ((ys-ye)**2))))
+
+    # Mars' position and velocity
+    dxmarsdt = vxmars
+    dvxmarsdt = -(G*sunmass*xmars)*(((xmars**2)+(ymars**2))**(-3/2)) * (1 + (alpha1/((xmars**2) + (ymars**2)))) - (G*mercurymass*(xm-xmars)) * ((((xm-xmars)**2) + ((ym-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xm-xmars)**2) + ((ym-ymars)**2)))) - (G*venusmass*(xv-xmars)) * ((((xv-xmars)**2) + ((yv-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xv-xmars)**2) + ((yv-ymars)**2)))) - (G*earthmass*(xe-xmars)) * ((((xe-xmars)**2) + ((ye-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xe-xmars)**2) + ((ye-ymars)**2)))) - (G*jupitermass*(xj-xmars)) * ((((xj-xmars)**2) + ((yj-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xj-xmars)**2) + ((yj-ymars)**2)))) - (G*saturnmass*(xs-xmars)) * ((((xs-xmars)**2) + ((ys-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xs-xmars)**2) + ((ys-ymars)**2))))
+    dymarsdt = vymars
+    dvymarsdt = -(G*sunmass*ymars)*(((xmars**2)+(ymars**2))**(-3/2)) * (1 + (alpha1/((xmars**2) + (ymars**2)))) - (G*mercurymass*(ym-ymars)) * ((((xm-xmars)**2) + ((ym-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xm-xmars)**2) + ((ym-ymars)**2)))) - (G*venusmass*(yv-ymars)) * ((((xv-xmars)**2) + ((yv-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xv-xmars)**2) + ((yv-ymars)**2)))) - (G*earthmass*(ye-ymars)) * ((((xe-xmars)**2) + ((ye-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xe-xmars)**2) + ((ye-ymars)**2)))) - (G*jupitermass*(yj-ymars)) * ((((xj-xmars)**2) + ((yj-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xj-xmars)**2) + ((yj-ymars)**2)))) - (G*saturnmass*(ys-ymars)) * ((((xs-xmars)**2) + ((ys-ymars)**2))**(-3/2)) * (1 + (alpha1/(((xs-xmars)**2) + ((ys-ymars)**2))))
+
+
+    # Jupiter's position and velocity
+    dxjdt = vxj
+    dvxjdt = -(G*sunmass*xj)*(((xj**2)+(yj**2))**(-3/2)) * (1 + (alpha1/((xj**2) + (yj**2)))) - (G*mercurymass*(xm-xj)) * ((((xm-xj)**2) + ((ym-yj)**2))**(-3/2)) * (1 + (alpha1/(((xm-xj)**2) + ((ym-yj)**2)))) - (G*venusmass*(xv-xj)) * ((((xv-xj)**2) + ((yv-yj)**2))**(-3/2)) * (1 + (alpha1/(((xv-xj)**2) + ((yv-yj)**2)))) - (G*earthmass*(xe-xj)) * ((((xe-xj)**2) + ((ye-yj)**2))**(-3/2)) * (1 + (alpha1/(((xe-xj)**2) + ((ye-yj)**2)))) - (G*marsmass*(xmars-xj)) * ((((xmars-xj)**2) + ((ymars-yj)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xj)**2) + ((ymars-yj)**2)))) - (G*saturnmass*(xs-xj)) * ((((xs-xj)**2) + ((ys-yj)**2))**(-3/2)) * (1 + (alpha1/(((xs-xj)**2) + ((ys-yj)**2))))
+    dyjdt = vyj
+    dvyjdt = -(G*sunmass*yj)*(((xj**2)+(yj**2))**(-3/2)) * (1 + (alpha1/((xj**2) + (yj**2)))) - (G*mercurymass*(ym-yj)) * ((((xm-xj)**2) + ((ym-yj)**2))**(-3/2)) * (1 + (alpha1/(((xm-xj)**2) + ((ym-yj)**2)))) - (G*venusmass*(yv-yj)) * ((((xv-xj)**2) + ((yv-yj)**2))**(-3/2)) * (1 + (alpha1/(((xv-xj)**2) + ((yv-yj)**2)))) - (G*earthmass*(ye-yj)) * ((((xe-xj)**2) + ((ye-yj)**2))**(-3/2)) * (1 + (alpha1/(((xe-xj)**2) + ((ye-yj)**2)))) - (G*marsmass*(ymars-yj)) * ((((xmars-xj)**2) + ((ymars-yj)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xj)**2) + ((ymars-yj)**2)))) - (G*saturnmass*(ys-yj)) * ((((xs-xj)**2) + ((ys-yj)**2))**(-3/2)) * (1 + (alpha1/(((xs-xj)**2) + ((ys-yj)**2))))
+
+    # Saturn's position and velocity
+    dxsdt = vxs
+    dvxsdt = -(G*sunmass*xs)*(((xs**2)+(ys**2))**(-3/2)) * (1 + (alpha1/((xs**2) + (ys**2)))) - (G*mercurymass*(xm-xs)) * ((((xm-xs)**2) + ((ym-ys)**2))**(-3/2)) * (1 + (alpha1/(((xm-xs)**2) + ((ym-ys)**2)))) - (G*venusmass*(xv-xs)) * ((((xv-xs)**2) + ((yv-ys)**2))**(-3/2)) * (1 + (alpha1/(((xv-xs)**2) + ((yv-ys)**2)))) - (G*earthmass*(xe-xs)) * ((((xe-xs)**2) + ((ye-ys)**2))**(-3/2)) * (1 + (alpha1/(((xe-xs)**2) + ((ye-ys)**2)))) - (G*marsmass*(xmars-xs)) * ((((xmars-xs)**2) + ((ymars-ys)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xs)**2) + ((ymars-ys)**2)))) - (G*jupitermass*(xj-xs)) * ((((xj-xs)**2) + ((yj-ys)**2))**(-3/2)) * (1 + (alpha1/(((xj-xs)**2) + ((yj-ys)**2))))
+    dysdt = vys
+    dvysdt = -(G*sunmass*ys)*(((xs**2)+(ys**2))**(-3/2)) * (1 + (alpha1/((xs**2) + (ys**2)))) - (G*mercurymass*(ym-ys)) * ((((xm-xs)**2) + ((ym-ys)**2))**(-3/2)) * (1 + (alpha1/(((xm-xs)**2) + ((ym-ys)**2)))) - (G*venusmass*(yv-ys)) * ((((xv-xs)**2) + ((yv-ys)**2))**(-3/2)) * (1 + (alpha1/(((xv-xs)**2) + ((yv-ys)**2)))) - (G*earthmass*(ye-ys)) * ((((xe-xs)**2) + ((ye-ys)**2))**(-3/2)) * (1 + (alpha1/(((xe-xs)**2) + ((ye-ys)**2)))) - (G*marsmass*(ymars-ys)) * ((((xmars-xs)**2) + ((ymars-ys)**2))**(-3/2)) * (1 + (alpha1/(((xmars-xs)**2) + ((ymars-ys)**2)))) - (G*jupitermass*(yj-ys)) * ((((xj-xs)**2) + ((yj-ys)**2))**(-3/2)) * (1 + (alpha1/(((xj-xs)**2) + ((yj-ys)**2))))
+
+    derivs = [dxdtm, dvxdtm, dydtm, dvydtm, dxvdt, dvxvdt, dyvdt, dvyvdt, dxedt, dvxedt, dyedt, dvyedt, dxmarsdt, dvxmarsdt, dymarsdt, dvymarsdt, dxjdt, dvxjdt, dyjdt, dvyjdt, dxsdt, dvxsdt, dysdt, dvysdt]
+    return derivs
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+sunmass = 1.98855*(10**30) #kg
+mercurymass = 3.30104*(10**23) #kg
+venusmass = 4.86732*(10**24) #kg
+earthmass = 5.97219*(10**24) #kg
+marsmass = 6.41693*(10**23) #kg
+jupitermass = 1.89813*(10**27) #kg
+saturnmass = 5.68319*(10**26) #kg
+sromercury = 0.387098261 #semimajor radius of orbit in au for mercury
+srovenus = 0.723333771 #semimajor radius of orbit in au for venus
+sroearth = 1 #semimajor radius of orbit in au for earth
+sromars = 1.523706365 #semimajor radius of orbit in au for mars
+srojupiter = 5.20287342 #semimajor radius of orbit in au for jupiter
+srosaturn = 9.536651047 #semimajor radius of orbit in au for saturn
+eccmercury = 0.20563593 #eccentricity of planets
+eccvenus = 0.00677672
+eccearth = 0.01671123
+eccmars = 0.0933941
+eccjupiter = 0.04838624
+eccsaturn = 0.05386179
+permercury = 0.2408425 #period in years
+pervenus = 0.6151866
+perearth = 1
+permars = 1.8808149
+perjupiter = 11.862409
+persaturn = 29.446986
+G = 1.97813348*(10**-29) #gravitational constant in au^3/year^2*kg
+alpha = 1.1 * (10**(-8)) #in au^2
+alpha1 = 1.1 * (10**(-7)) #in au^2
+alpha2 = 1.1 * (10**(-6)) #in au^2
+alpha3 = 1.1 * (10**(-5)) #in au^2
+equilibmercury= sromercury*((1-(eccmercury**2)))
+perhildistmercury = (equilibmercury)/(1+eccmercury) #parahelion mercury
+apohildistmercury = (equilibmercury)/(1-eccmercury) #apohelion mercury
+vtaninitmercury = ((np.sqrt(2*sunmass*G*mercurymass*(mercurymass)*((perhildistmercury*apohildistmercury)/(perhildistmercury+apohildistmercury))))/(mercurymass*perhildistmercury))
+equilibvenus= srovenus*((1-(eccvenus)**2))
+perhildistvenus = (equilibvenus)/(1+eccvenus) #parahelion venus
+apohildistvenus = (equilibvenus)/(1-eccvenus) #apohelion venus
+vtaninitvenus = np.sqrt(2*sunmass*G*venusmass*(venusmass)*((perhildistvenus*apohildistvenus)/(perhildistvenus+apohildistvenus)))/(venusmass*perhildistvenus)
+equilibearth= sroearth*((1-(eccearth)**2))
+perhildistearth = (equilibearth)/(1+eccearth) #parahelion earth
+apohildistearth = (equilibearth)/(1-eccearth) #apohelion earth
+vtaninitearth = np.sqrt(2*sunmass*G*earthmass*(earthmass)*((perhildistearth*apohildistearth)/(perhildistearth+apohildistearth)))/(earthmass*perhildistearth)
+equilibmars= sromars*((1-(eccmars)**2))
+perhildistmars = (equilibmars)/(1+eccmars) #parahelion mars
+apohildistmars = (equilibmars)/(1-eccmars) #apohelion mars
+vtaninitmars = np.sqrt(2*sunmass*G*marsmass*marsmass*((perhildistmars*apohildistmars)/(perhildistmars+apohildistmars)))/(marsmass*perhildistmars)
+equilibjupiter= srojupiter*((1-(eccjupiter)**2))
+perhildistjupiter = (equilibjupiter)/(1+eccjupiter) #parahelion jupiter
+apohildistjupiter = (equilibjupiter)/(1-eccjupiter) #apohelion jupiter
+vtaninitjupiter = np.sqrt(2*sunmass*G*jupitermass*(jupitermass)*((perhildistjupiter*apohildistjupiter)/(perhildistjupiter+apohildistjupiter)))/(jupitermass*perhildistjupiter)
+equilibsaturn= srosaturn*((1-(eccsaturn)**2))
+perhildistsaturn = (equilibsaturn)/(1+eccsaturn) #parahelion saturn
+apohildistsaturn = (equilibsaturn)/(1-eccsaturn) #apohelion saturn
+vtaninitsaturn = np.sqrt(2*sunmass*G*saturnmass*(saturnmass)*((perhildistsaturn*apohildistsaturn)/(perhildistsaturn+apohildistsaturn)))/(saturnmass*perhildistsaturn)
+x= 1441/perjupiter
+zeta = 5000000
+t = np.linspace(0,x,zeta) # time
+ic = [perhildistmercury, 0, 0, vtaninitmercury,perhildistvenus, 0, 0, vtaninitvenus,perhildistearth, 0, 0, vtaninitearth,perhildistmars, 0, 0, vtaninitmars,perhildistjupiter, 0, 0, vtaninitjupiter,perhildistsaturn, 0, 0, vtaninitsaturn]# initial conditions, [x, vx, y, vy]
+xxvyyv=odeint(planet, ic, t, args =(G,alpha,sunmass, mercurymass, venusmass, earthmass, marsmass, jupitermass, saturnmass))
+x1, y1 = xxvyyv[:, 0], xxvyyv[:, 2]
+x2, y2 = xxvyyv[:, 4], xxvyyv[:, 6]
+x3, y3 = xxvyyv[:, 8], xxvyyv[:, 10]
+x4, y4 = xxvyyv[:, 12], xxvyyv[:, 14]
+x5, y5 = xxvyyv[:, 16], xxvyyv[:, 18]
+x6, y6 = xxvyyv[:, 20], xxvyyv[:, 22]
+radiusidentifierperihelion = []
+perheliontimes = []
+perhelionsmerc = []
+thetasperhilmerc = []
+xperhilmerc = []
+yperhilmerc = []
+perhelionsmerc2 = []
+thetasperhilmerc2 = []
+radiii = np.sqrt(((x1)**2)+((y1**2)))
+for i in range(1,zeta-1):
+    if radiii[i] < radiii[i - 1] and radiii[i] < radiii[i + 1]:
+        radiusidentifierperihelion.append(i)
+        perheliontimes.append(t[i])
+        perhelionsmerc.append(radiii[i])
+        xperhilmerc.append( x1[i])
+        yperhilmerc.append( y1[i])
+        thetasperhilmerc.append(np.arctan2((y1[i]),(x1[i])))
+    else:
+        radiusidentifierperihelion.append(0)
+thetasarcseconds = np.arange(len(thetasperhilmerc))
+perheliontimesdecades = np.array(perheliontimes) / np.float64(100)
+thetasarcseconds = np.array(thetasperhilmerc) * np.float64((180 / np.pi) * 3600)
+print(np.size(perheliontimesdecades))
+print(np.size(thetasarcseconds))
+a = np.polyfit(perheliontimesdecades,thetasarcseconds,1)
+print((a))
+plottythingamobobber = np.poly1d(a)
+plt.figure(0)
+plt.plot(t,x1); plt.title('X Position Vs Time');
+plt.figure(1)
+plt.plot(x1, y1, label='Mercury', color='gray')
+plt.plot(x2, y2, label='Venus', color='yellow')
+plt.plot(x3, y3, label='Earth', color='blue')
+plt.plot(x4, y4, label='Mars', color='red')
+plt.plot(x5, y5, label='Jupiter', color='orange')
+plt.plot(x6, y6, label='Saturn', color='gold')
+plt.plot(0,0,'ro')
+plt.title("Orbits")
+plt.xlabel("X Position (AU)")
+plt.ylabel("Y Position (AU)")
+plt.legend()
+plt.grid(True)
+plt.figure(2)
+plt.plot(x1, y1, label='Mercury', color='gray')
+plt.plot(x2, y2, label='Venus', color='yellow')
+plt.plot(x3, y3, label='Earth', color='blue')
+plt.plot(0,0,'ro')
+plt.figure(3)
+plt.title("xy perhelion graph ")
+plt.plot(0,0,'ro')
+plt.scatter(xperhilmerc,yperhilmerc, color = 'blue')
+plt.xlim(0.305,0.3207)
+plt.ylim(-0.02,0.02)
+plt.figure(5)
+plt.title("theta over time")
+plt.plot(perheliontimesdecades,thetasarcseconds)
+plt.plot(perheliontimesdecades, plottythingamobobber(perheliontimesdecades))
+plt.figure(4)
+plt.title("polar coordinates for radius")
+plt.axes(projection = 'polar') 
+plt.polar(thetasperhilmerc,perhelionsmerc)
